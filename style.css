@@ -1,0 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f0f0f;
+    color: #fff;
+}
+
+/* Layout */
+.main {
+    display: flex;
+    min-height: 100vh;
+}
+
+.left {
+    width: 65%;
+    padding: 20px 30px;
+}
+
+.right {
+    width: 35%;
+    background: #121212;
+    padding: 25px;
+    border-left: 1px solid #222;
+}
+
+/* Navbar */
+.navbar {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00e676;
+    margin-bottom: 15px;
+}
+
+/* Search */
+.search input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #1a1a1a;
+    color: white;
+    margin-bottom: 15px;
+    outline: none;
+}
+
+/* Categories */
+.categories {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.cat {
+    padding: 8px 14px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid #333;
+    transition: 0.3s;
+}
+
+.cat:hover {
+    background: #00c853;
+    color: black;
+    transform: scale(1.05);
+}
+
+/* Cards */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #181818;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 0 transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 200, 83, 0.2);
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 12px;
+}
+
+.card-content h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.card-content p {
+    font-size: 13px;
+    color: #aaa;
+}
+
+/* Right Panel */
+.right h2 {
+    margin-bottom: 15px;
+    color: #00e676;
+}
+
+.right img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+#details {
+    line-height: 1.6;
+}
+
+#details ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+#details li {
+    margin-bottom: 5px;
+}
+
+/* Scrollbar (optional polish) */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+.card.active {
+    border: 2px solid #00c853;
+    transform: scale(1.03);
+}

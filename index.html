@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Zomato Clone</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: Arial;
+    background:#0f0f0f;
+    color:white;
+}
+
+/* Layout */
+.main { display:flex; }
+.left { width:65%; padding:20px; }
+.right {
+    width:35%;
+    background:#121212;
+    padding:20px;
+    border-left:1px solid #222;
+}
+
+/* Navbar */
+.navbar {
+    font-size:22px;
+    color:#00e676;
+    margin-bottom:10px;
+}
+
+/* Search */
+.search input {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    background:#1a1a1a;
+    border:none;
+    color:white;
+}
+
+/* Categories */
+.categories {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+
+.cat {
+    padding:8px 12px;
+    background:#1a1a1a;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.cat:hover {
+    background:#00c853;
+    color:black;
+}
+
+/* Cards */
+.container {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap:15px;
+}
+
+.card {
+    background:#181818;
+    border-radius:10px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.card.active {
+    border:2px solid #00c853;
+    transform:scale(1.03);
+}
+
+.card img {
+    width:100%;
+    height:130px;
+    object-fit:cover;
+}
+
+.card-content { padding:10px; }
+
+/* Right panel */
+.right img {
+    width:100%;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+button {
+    margin-left:10px;
+    padding:4px 8px;
+    background:#00c853;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.place-btn {
+    margin-top:10px;
+    width:100%;
+    padding:10px;
+    background:#00e676;
+    font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="main">
+
+<!-- LEFT -->
+<div class="left">
+
+<div class="navbar">QuickEats</div>
+
+<div class="search">
+<input type="text" id="search" placeholder="Search restaurants...">
+</div>
+
+<div class="categories">
+<div class="cat">All</div>
+<div class="cat">American</div>
+<div class="cat">Mexican</div>
+<div class="cat">Italian</div>
+<div class="cat">Continental</div>
+</div>
+
+<div class="container" id="restaurantList"></div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+<h2>Details</h2>
+<div id="details">Select a restaurant</div>
+</div>
+
+</div>
+
+<script>
+
+// CART
+let cart = [];
+let total = 0;
+
+// DATA
+const restaurants = [
+{
+    name: "McDonald's",
+    category: "American",
+    menu: [
+        {name:"Mc Aloo Tikki", price:80},
+        {name:"Crispy Burger", price:120},
+        {name:"Fries", price:90}
+    ],
+    img: "mcdonalds.jpg"
+},
+{
+    name: "Taco Bell",
+    category: "Mexican",
+    menu: [
+        {name:"Taco", price:100},
+        {name:"Burrito", price:150}
+    ],
+    img: "tb.jpg"
+},
+{
+    name: "Domino's",
+    category: "Italian",
+    menu: [
+        {name:"Margherita", price:200},
+        {name:"Farmhouse", price:350},
+        {name:"Garlic Bread", price:150}
+    ],
+    img: "domoinos.jpg"
+},
+{
+    name: "Cafe Peony",
+    category: "Desserts",
+    menu: [
+        {name:"Brownie", price:180},
+        {name:"Ice Cream", price:150}
+    ],
+    img: "17.jpg"
+},
+{
+    name: "Mocha",
+    category: "Continental",
+    menu: [
+        {name:"Coffee", price:160},
+        {name:"Shake", price:180}
+    ],
+    img: "mocha.jpg"
+}
+];
+
+// DISPLAY
+function display(list) {
+    const container = document.getElementById("restaurantList");
+    container.innerHTML = "";
+
+    list.forEach(r => {
+        container.innerHTML += `
+            <div class="card" data-name="${r.name}">
+                <img src="${r.img}">
+                <div class="card-content">
+                    <h3>${r.name}</h3>
+                    <p>${r.category}</p>
+                </div>
+            </div>
+        `;
+    });
+
+    document.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", function() {
+            showMenu(this.dataset.name, this);
+        });
+    });
+}
+
+// SHOW MENU
+function showMenu(name, element) {
+
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+    element.classList.add("active");
+
+    const r = restaurants.find(x => x.name === name);
+    const details = document.getElementById("details");
+
+    let html = `<img src="${r.img}">
+                <h2>${r.name}</h2>
+                <ul>`;
+
+    r.menu.forEach(item => {
+        html += `
+            <li>
+                ${item.name} - ₹${item.price}
+                <button onclick="addToCart('${item.name}', ${item.price})">Add</button>
+            </li>
+        `;
+    });
+
+    html += `</ul>
+             <h3>🛒 Cart: <span id="cartCount">${cart.length}</span> items | ₹${total}</h3>
+             <button class="place-btn" onclick="placeOrder()">Place Order</button>`;
+
+    details.innerHTML = html;
+}
+
+// ADD TO CART
+function addToCart(name, price) {
+    cart.push(name);
+    total += price;
+
+    document.getElementById("cartCount").innerText = cart.length;
+}
+
+// PLACE ORDER
+function placeOrder() {
+
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
+
+    alert("🎉 Order Placed!\nTotal: ₹" + total);
+
+    cart = [];
+    total = 0;
+
+    document.getElementById("details").innerHTML = `
+        <h2>✅ Order Confirmed</h2>
+        <p>Your food is on the way 🍔🚀</p>
+    `;
+}
+
+// SEARCH
+document.getElementById("search").addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase();
+    const filtered = restaurants.filter(r =>
+        r.name.toLowerCase().includes(value)
+    );
+    display(filtered);
+});
+
+// CATEGORY FILTER
+document.querySelectorAll(".cat").forEach(cat => {
+    cat.addEventListener("click", () => {
+
+        const type = cat.innerText;
+
+        if (type === "All") display(restaurants);
+        else {
+            const filtered = restaurants.filter(r => r.category === type);
+            display(filtered);
+        }
+
+    });
+});
+
+// INIT
+display(restaurants);
+
+</script>
+
+</body>
+</html>
